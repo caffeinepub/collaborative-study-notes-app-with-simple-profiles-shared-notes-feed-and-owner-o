@@ -1,0 +1,87 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-08T18:49:35.565Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 5,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-41",
+        "summary": "Add a public backend API to return the list of users who liked a given note, so anyone can see who liked it.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-42",
+        "summary": "Update the backend types to include a dedicated public type for displaying likers (e.g., principal + name + college), and ensure the like list is derived from the existing noteLikes state and profiles map.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-43",
+        "summary": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/cacheKeys.ts",
+          "frontend/src/hooks/useNoteLikers.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/cacheKeys.ts",
+          "frontend/src/hooks/useNoteLikers.ts"
+        ]
+      },
+      {
+        "id": "REQ-44",
+        "summary": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/NoteLikersDialog.tsx",
+          "frontend/src/components/NoteReaderSheet.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/NoteLikersDialog.tsx",
+          "frontend/src/components/NoteReaderSheet.tsx"
+        ]
+      },
+      {
+        "id": "REQ-45",
+        "summary": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useNotesMutations.ts",
+          "frontend/src/components/LikeButton.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useNotesMutations.ts"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/NoteLikersDialog.tsx",
+    "frontend/src/components/NoteReaderSheet.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useNoteLikers.ts",
+    "frontend/src/hooks/useNotesMutations.ts",
+    "frontend/src/lib/cacheKeys.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

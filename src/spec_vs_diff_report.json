@@ -1,0 +1,36 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-08T18:49:35.562Z",
+  "summary": "Frontend adds a \"Liked by\" dialog, a React Query hook, and a cache key for note likers, and wires invalidation after liking a note. Backend shows a new public type `NoteLiker`, but the required public query API and its like-to-profile resolution behavior are not evidenced in the provided backend diff excerpt.",
+  "missing_requirements": [
+    {
+      "id": "REQ-41",
+      "requirement": "Add a public backend query API method that accepts a noteId and returns the list of users who liked that note (visible to everyone), with correct error/empty behaviors.",
+      "reason": "The diff shows a new `public type NoteLiker` but does not show any new `getNoteLikers(noteId)` (or equivalent) query method implementation, nor the specified behaviors (trap \"Note not found\", empty list when no likes, readable by any caller). The backend file is truncated, so it may exist, but it is not evidenced in the provided diff summary.",
+      "evidence": [
+        "backend/main.mo (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-42",
+      "requirement": "Ensure the like list is derived from existing `noteLikes` and `profiles`, resolving principals to profiles and using safe fallbacks for missing profiles.",
+      "reason": "While `public type NoteLiker = { principal; name; college }` is present, the diff excerpt does not show code that builds the returned list from `noteLikes`, looks up each principal in `profiles`, or applies the required fallback (e.g., \"Unknown user\" / empty college) when a profile entry is missing.",
+      "evidence": [
+        "backend/main.mo (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.62,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/NoteLikersDialog.tsx",
+    "frontend/src/components/NoteReaderSheet.tsx",
+    "frontend/src/hooks/useNoteLikers.ts",
+    "frontend/src/hooks/useNotesMutations.ts",
+    "frontend/src/lib/cacheKeys.ts",
+    "project_state.json"
+  ]
+}

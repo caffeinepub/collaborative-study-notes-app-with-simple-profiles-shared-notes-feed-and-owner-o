@@ -1,0 +1,401 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 19,
+  "summary": "Collaborative study notes mobile-optimized web app (Android browser friendly) where users sign up/login with simple profiles, create notes that can include text plus uploaded images, and all submitted content is publicly visible immediately (no admin role, no approval/moderation workflow). Users can view notes and add comments. Regular users have restricted permissions so only note owners can edit/delete their notes.",
+  "architectural_notes": [
+    "Optimize for Android web browsers (performance and smooth UX).",
+    "Implement real-time updates for shared notes visible to all users.",
+    "Enforce strict authorization so only note owners can edit/delete their notes.",
+    "Add a global UI watermark layer (visible corner branding) consistently across all screens.",
+    "No APK deliverable: build as a mobile-optimized web app (Android browser first).",
+    "Remove admin role and moderation/approval workflow: notes and images are visible immediately upon creation (no pending/approved states).",
+    "Implement night mode with a user-controlled dark theme toggle accessible from the sidebar.",
+    "Likes feature should expose a public per-note list of users who liked the note (not just a count)."
+  ],
+  "known_issues": [
+    "Intermittent glitch: page/feed does not refresh/update while the app is open (Android browser)."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-implement-authentication-lightweight-user-profiles-so-a-student-can-create-an-account-profile-using-only-their-name-and-college-name-and-the-app-can-reliably-identify-the-note-owner-for-permission-control",
+      "title": "Implement authentication + lightweight user profiles so a student can create an account/profile using only their name and college name, and the app can reliably identify the note owner for permission control.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-main-ui-to-browse-and-read-all-students-notes-smoothly-a-mobile-first-feed-optimized-for-android-browsers-with-fast-loading-clear-typography-and-a-note-reader-view-modal-drawer-or-dedicated-page-that-opens-any-note-without-errors",
+      "title": "Build the main UI to browse and read all students’ notes smoothly: a mobile-first feed optimized for Android browsers with fast loading, clear typography, and a note reader view (modal/drawer or dedicated page) that opens any note without errors.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-note-creation-and-note-management-ux-users-can-create-a-note-with-question-number-s-and-content-and-can-star-pin-notes-only-the-owner-can-see-and-use-edit-delete-controls-on-their-own-notes",
+      "title": "Provide note creation and note management UX: users can create a note with question number(s) and content, and can star/pin notes; only the owner can see and use edit/delete controls on their own notes.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-near-real-time-updates-and-smooth-performance-the-notes-feed-should-refresh-automatically-and-efficiently-using-a-polling-refresh-strategy-appropriate-for-the-platform-plus-client-side-caching-for-fast-navigation",
+      "title": "Implement near-real-time updates and smooth performance: the notes feed should refresh automatically and efficiently, using a polling/refresh strategy appropriate for the platform, plus client-side caching for fast navigation.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-coherent-clean-visual-theme-colors-typography-spacing-components-suitable-for-a-student-study-tool-and-apply-it-consistently-across-onboarding-profile-feed-note-reader-and-note-editor-screens-avoid-blue-purple-as-primary-accents",
+      "title": "Add a coherent, clean visual theme (colors, typography, spacing, components) suitable for a student study tool, and apply it consistently across onboarding/profile, feed, note reader, and note editor screens (avoid blue/purple as primary accents).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-reliability-safeguards-consistent-error-handling-and-user-feedback-for-all-backend-calls-create-list-get-update-delete-toggle-preventing-silent-failures-and-ensuring-the-app-remains-usable-under-intermittent-network-conditions-typical-on-mobile",
+      "title": "Add reliability safeguards: consistent error handling and user feedback for all backend calls (create/list/get/update/delete/toggle), preventing silent failures and ensuring the app remains usable under intermittent network conditions typical on mobile.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-visible-fixed-text-watermark-reading-aman-sn-that-appears-in-a-corner-on-all-screens-in-the-app-including-unauthenticated-screens-login-screen-authenticated-screens-wrapped-by-the-main-layout-and-transient-full-screen-states-e-g-auth-initializing-loading-and-error-boundary-ui",
+      "title": "Add a visible, fixed-text watermark reading “Aman SN” that appears in a corner on all screens in the app, including unauthenticated screens (login screen), authenticated screens wrapped by the main layout, and transient full-screen states (e.g., auth initializing/loading and error boundary UI).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-watermark-styling-so-it-reads-as-visible-corner-branding-while-remaining-unobtrusive-keep-it-consistently-positioned-responsive-on-mobile-and-legible-in-both-light-and-dark-themes-without-harming-readability-of-primary-content",
+      "title": "Implement the watermark styling so it reads as visible corner branding while remaining unobtrusive: keep it consistently positioned, responsive on mobile, and legible in both light and dark themes without harming readability of primary content.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-react-app-so-note-creation-communicates-that-submissions-require-admin-approval-and-will-not-appear-publicly-until-approved",
+      "title": "Update the React app so note creation communicates that submissions require admin approval and will not appear publicly until approved.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-admin-only-moderation-ui-in-the-react-app-to-review-pending-notes-and-approve-or-reject-them-using-existing-authentication-role-detection",
+      "title": "Add an admin-only moderation UI in the React app to review pending notes and approve or reject them, using existing authentication/role detection.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-frontend-react-query-hooks-mutations-and-cache-invalidation-needed-to-support-pending-note-listing-and-approve-reject-actions-without-breaking-the-existing-feed-polling-caching-behavior",
+      "title": "Add frontend React Query hooks/mutations and cache invalidation needed to support pending-note listing and approve/reject actions without breaking the existing feed polling/caching behavior.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-react-app-reflects-the-host-s-admin-status-immediately-after-login-by-showing-the-existing-moderation-entry-point-in-the-header-layout-and-allowing-the-host-to-open-the-existing-admin-moderation-dialog",
+      "title": "Ensure the React app reflects the host’s admin status immediately after login by showing the existing moderation entry point in the header layout and allowing the host to open the existing admin moderation dialog.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-note-creation-edit-ui-to-support-attaching-images-client-side-selection-upload-and-clearly-communicate-that-notes-images-remain-hidden-until-admin-approval-ensure-approved-note-views-render-approved-images",
+      "title": "Update the note creation/edit UI to support attaching images (client-side selection + upload) and clearly communicate that notes/images remain hidden until admin approval; ensure approved note views render approved images.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-admin-moderation-ui-so-the-admin-can-review-pending-submissions-comprehensively-notes-and-their-attached-images-and-perform-approve-reject-actions-for-both-notes-and-images-include-admin-edit-delete-controls-for-any-note-and-any-image",
+      "title": "Extend the admin moderation UI so the admin can review pending submissions comprehensively (notes and their attached images), and perform approve/reject actions for both notes and images; include admin edit/delete controls for any note and any image.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-comments-ui-on-the-note-reader-screen-that-lists-comments-for-an-approved-note-and-lets-authenticated-users-add-a-new-comment-ensure-error-loading-empty-states-are-handled-consistently-with-existing-feedback-toast-patterns",
+      "title": "Add a comments UI on the note reader screen that lists comments for an approved note and lets authenticated users add a new comment; ensure error/loading/empty states are handled consistently with existing Feedback/toast patterns.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-react-ui-to-remove-all-admin-moderation-ui-and-messaging-returning-the-app-ux-to-the-pre-approval-behavior-no-submitted-for-approval-text-no-moderation-entry-point",
+      "title": "Update the React UI to remove all admin/moderation UI and messaging, returning the app UX to the pre-approval behavior (no “submitted for approval” text, no moderation entry point).",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-frontend-data-hooks-mutations-and-react-query-cache-keys-that-are-only-used-for-pending-notes-and-approval-actions-and-ensure-the-notes-feed-polling-caching-continues-to-work-as-before",
+      "title": "Remove frontend data hooks/mutations and React Query cache keys that are only used for pending notes and approval actions, and ensure the notes feed polling/caching continues to work as before.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-sidebar-mobile-friendly-drawer-that-can-be-opened-from-the-main-authenticated-layout-and-place-a-night-mode-toggle-button-inside-the-sidebar",
+      "title": "Add a sidebar (mobile-friendly drawer) that can be opened from the main authenticated layout, and place a Night mode toggle button inside the sidebar.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-theme-switching-so-the-night-mode-toggle-applies-and-removes-the-tailwind-dark-mode-class-class-based-dark-mode-across-the-entire-app-including-unauthenticated-screens-authenticated-screens-and-transient-full-screen-states-auth-initializing-loading-and-error-boundary",
+      "title": "Implement theme switching so the Night mode toggle applies and removes the Tailwind dark-mode class (class-based dark mode) across the entire app, including unauthenticated screens, authenticated screens, and transient full-screen states (auth initializing/loading and error boundary).",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-the-user-s-night-mode-preference-locally-client-side-so-it-is-restored-on-refresh-and-future-visits-and-ensure-the-initial-render-uses-the-stored-preference-to-avoid-a-flash-of-incorrect-theme",
+      "title": "Persist the user’s Night mode preference locally (client-side) so it is restored on refresh and future visits, and ensure the initial render uses the stored preference to avoid a flash of incorrect theme.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-fixed-aman-sn-corner-watermark-remains-legible-and-unobtrusive-in-both-light-and-dark-themes-without-obscuring-primary-content",
+      "title": "Ensure the fixed “Aman SN” corner watermark remains legible and unobtrusive in both light and dark themes without obscuring primary content.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-frontend-ui-for-likes-on-each-note-show-a-like-button-and-the-current-like-count-on-note-cards-in-the-feed-and-within-the-note-reader-view-and-ensure-the-ui-updates-immediately-after-a-successful-like",
+      "title": "Implement frontend UI for Likes on each note: show a Like button and the current like count on Note cards in the feed and within the Note reader view, and ensure the UI updates immediately after a successful like.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enforce-one-like-per-user-in-the-frontend-ux-by-preventing-repeat-likes-from-the-same-logged-in-user-for-the-same-note-e-g-disable-the-like-button-and-or-show-an-error-toast-if-already-liked-consistent-with-existing-toast-error-patterns",
+      "title": "Enforce one-like-per-user in the frontend UX by preventing repeat likes from the same logged-in user for the same note (e.g., disable the Like button and/or show an error toast if already liked), consistent with existing toast/error patterns.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-reported-android-browser-page-feed-does-not-refresh-while-the-app-is-open-glitch-by-adding-a-client-side-refresh-strategy-that-handles-browser-back-forward-cache-restores-and-app-tab-resume-without-breaking-existing-polling-behavior",
+      "title": "Fix the reported Android browser “page/feed does not refresh while the app is open” glitch by adding a client-side refresh strategy that handles browser back/forward cache restores and app/tab resume, without breaking existing polling behavior.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-data-hooks-and-cache-keys-to-fetch-the-likers-list-for-a-specific-note",
+      "title": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-ui-to-display-who-liked-a-note-visible-to-everyone-from-the-note-reader-view",
+      "title": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-likes-list-ui-stays-consistent-with-the-existing-one-like-per-user-behavior-and-likecount-display-without-changing-the-current-like-button-behavior",
+      "title": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "User accounts with minimal signup (name + college)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Create and publish study notes with question numbers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Star/pin important notes",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Real-time feed where all notes are visible to all users with smooth note viewing",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Owner-only edit and delete permissions for notes (permission control)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Fast loading, clean/simple UI, optimized smooth performance for Android browsers",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Create a Motoko backend data model and API for study notes that supports: creating notes, listing notes visible to everyone, retrieving a single note, updating a note, deleting a note, and toggling star/pin flags; each note must include question number(s) and text content and track ownership.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Enforce strict permission control on the backend so only the note owner can update or delete their own notes; all users can read/list all notes.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Add a visible corner watermark with fixed text “Aman SN” shown on all screens",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Remove APK requirement; deliver as a mobile-optimized web app only",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-29",
+      "summary": "If backend state schema changes are required to support images and/or comments, add or update the conditional Motoko upgrade migration so existing deployed state upgrades safely without data loss.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-30",
+      "summary": "Support image uploads attached to notes (images are publicly visible immediately; no admin approval/moderation)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add comments on notes (users can view notes and add comments; no admin-only comment deletion and no approval-gating constraints)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Remove the admin/approval workflow from the backend so that newly created and edited notes are immediately visible to everyone (no approval gating) and the canister does not require any admin principal to function.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-33",
+      "summary": "Remove admin-only moderation endpoints and admin-gated filtering from the backend API (e.g., pending-note listing and approve/reject flows) so there are no admin-only operations remaining for notes.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-34",
+      "summary": "Remove admin-role assumptions from backend role detection so the frontend does not depend on any admin assignment; ensure any role/authorization API used by the frontend remains stable and does not require an initialized admin.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-35",
+      "summary": "Add night mode (dark theme) with a user-toggle button located in the sidebar",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-36",
+      "summary": "Add a Like/upvote feature on each note: show a Like button + visible like count, and enforce one-like-per-user per note",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-37",
+      "summary": "Extend the backend note model and APIs to support a Like/upvote feature per note, including: (1) a visible like count, and (2) enforcing that each authenticated user can like a given note at most once.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-38",
+      "summary": "Add conditional Motoko state migration logic (backend/migration.mo) if required by the Like feature’s persisted state changes, ensuring existing deployed canister state upgrades safely without data loss.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-39",
+      "summary": "Show the full list of users who liked a note (visible to everyone)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-40",
+      "summary": "Add a public backend API to return the list of users who liked a given note, so anyone can see who liked it.",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-41",
+      "summary": "Update the backend types to include a dedicated public type for displaying likers (e.g., principal + name + college), and ensure the like list is derived from the existing noteLikes state and profiles map.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Collaborative study notes app with simple profiles, shared notes feed, and owner-only editing",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

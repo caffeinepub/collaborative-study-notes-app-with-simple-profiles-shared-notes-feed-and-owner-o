@@ -1,0 +1,125 @@
+{
+  "kind": "build_request",
+  "title": "Show the full list of users who liked a note (visible to everyone)",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-41",
+      "text": "Add a public backend API to return the list of users who liked a given note, so anyone can see who liked it.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "and every one seen who who likes the note"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes a new query method that accepts a noteId and returns the list of likers for that note.",
+        "If the note does not exist, the method returns a clear error consistent with existing backend patterns (e.g., traps with \"Note not found\").",
+        "If a note exists but has no likes, the method returns an empty list (not an error).",
+        "Returned liker entries include enough user-facing identity to display (at minimum: the liker name and college; also include the liker principal as a stable identifier).",
+        "The endpoint is readable by any caller (no admin-only restriction), matching the requirement that the list is visible to everyone."
+      ]
+    },
+    {
+      "id": "REQ-42",
+      "text": "Update the backend types to include a dedicated public type for displaying likers (e.g., principal + name + college), and ensure the like list is derived from the existing noteLikes state and profiles map.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "yes yes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A public type exists for a liker display entry (principal + name + college).",
+        "The returned list is built from the current noteLikes set for the noteId and resolves each principal to the stored profile in the profiles map.",
+        "If a principal exists in noteLikes but does not have a profile entry, the backend returns a safe fallback for that entry (e.g., name \"Unknown user\" and empty college) rather than trapping."
+      ]
+    },
+    {
+      "id": "REQ-43",
+      "text": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "and every one seen who who likes the note"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new CACHE_KEYS entry exists for note likers (keyed by noteId).",
+        "A new React Query hook exists to fetch likers for a noteId using the actor method added in REQ-41.",
+        "The hook is disabled when noteId is null/undefined and handles actor-not-ready states consistently with existing hooks."
+      ]
+    },
+    {
+      "id": "REQ-44",
+      "text": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "and every one seen who who likes the note"
+        ]
+      },
+      "acceptanceCriteria": [
+        "In the note reader UI, users can open a \"Liked by\" view that lists all likers for the currently open note.",
+        "The list renders each liker’s name and college in a readable format.",
+        "The UI handles loading, empty, and error states using the app’s existing Feedback/toast patterns (e.g., shows a loading state while fetching; shows an empty state like \"No likes yet\" when empty; shows an error state with retry when failing).",
+        "The likers view is accessible to unauthenticated users as well (since the like list is visible to everyone), assuming they can view notes in the app."
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "text": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "build"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The existing Like button still prevents repeat likes in the UI and continues to display the numeric likeCount.",
+        "After a successful like, the note details refresh as they do today and the likers list also reflects the new liker (either by invalidating/refetching the likers query or by updating it predictably).",
+        "No regressions to notes feed polling/refresh behavior or existing likeCount rendering in NoteCard and NoteReaderSheet."
+      ]
+    }
+  ],
+  "constraints": [
+    "Respect the single-actor backend architecture: implement backend changes only in backend/main.mo (do not introduce additional backend services).",
+    "Do not modify any frontend files under frontend/src/components/ui or other frontend.immutablePaths; compose existing UI components instead.",
+    "Use English for any user-facing text.",
+    "Do not reintroduce any admin/moderation/approval workflow."
+  ],
+  "nonGoals": [
+    "Adding dislike/unlike functionality.",
+    "Adding privacy controls for hiding liker identities.",
+    "Showing the likes list directly inline on every feed card (a reader-view dialog/sheet entry point is sufficient)."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

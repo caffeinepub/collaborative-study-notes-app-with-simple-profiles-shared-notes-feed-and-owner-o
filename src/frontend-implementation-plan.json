@@ -1,0 +1,71 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Public note likers list (reader-view dialog)",
+  "requirements": [
+    {
+      "id": "REQ-43",
+      "summary": "Add React Query cache keys and a data hook to fetch the likers list for a note.",
+      "acceptanceCriteria": [
+        "A new CACHE_KEYS entry exists for note likers (keyed by noteId).",
+        "A new React Query hook exists to fetch likers for a noteId using the actor method added in REQ-41.",
+        "The hook is disabled when noteId is null/undefined and handles actor-not-ready states consistently with existing hooks."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/cacheKeys.ts",
+          "operation": "modify",
+          "description": "Add a CACHE_KEYS.noteLikers(noteId) entry (keyed by noteId string) for caching the likers list query."
+        },
+        {
+          "path": "frontend/src/hooks/useNoteLikers.ts",
+          "operation": "create",
+          "description": "Create a new React Query hook (e.g., useGetNoteLikers(noteId)) that calls actor.getNoteLikers(noteId), is enabled only when actor is ready and noteId is not null, and follows the same actor-not-ready patterns used in existing hooks like useGetNote."
+        }
+      ]
+    },
+    {
+      "id": "REQ-44",
+      "summary": "Add a reader-view UI entry point to open a \"Liked by\" view listing all users who liked the current note.",
+      "acceptanceCriteria": [
+        "In the note reader UI, users can open a \"Liked by\" view that lists all likers for the currently open note.",
+        "The list renders each liker’s name and college in a readable format.",
+        "The UI handles loading, empty, and error states using the app’s existing Feedback/toast patterns (e.g., shows a loading state while fetching; shows an empty state like \"No likes yet\" when empty; shows an error state with retry when failing).",
+        "The likers view is accessible to unauthenticated users as well (since the like list is visible to everyone), assuming they can view notes in the app."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/NoteLikersDialog.tsx",
+          "operation": "create",
+          "description": "Create a NoteLikersDialog component that uses shadcn-ui Dialog (and existing Button/ScrollArea/Separator as needed) to present a \"Liked by\" modal listing likers (name + college), and uses existing Feedback components (LoadingState/EmptyState/ErrorState) for loading/empty/error with a retry action. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/NoteReaderSheet.tsx",
+          "operation": "modify",
+          "description": "Wire NoteLikersDialog into the note reader view: add a \"Liked by\" trigger near the existing LikeButton and pass the current noteId so the dialog fetches and displays likers for the open note. Use shadcn-ui Button for the trigger and keep all user-facing text in English. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-45",
+      "summary": "Keep existing like behavior and ensure the likers list stays in sync after liking without regressions.",
+      "acceptanceCriteria": [
+        "The existing Like button still prevents repeat likes in the UI and continues to display the numeric likeCount.",
+        "After a successful like, the note details refresh as they do today and the likers list also reflects the new liker (either by invalidating/refetching the likers query or by updating it predictably).",
+        "No regressions to notes feed polling/refresh behavior or existing likeCount rendering in NoteCard and NoteReaderSheet."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useNotesMutations.ts",
+          "operation": "modify",
+          "description": "Update the like mutation success handling to also invalidate the note likers query cache key for the liked noteId (in addition to the existing notes and note invalidations) so the \"Liked by\" list reflects new likes without changing LikeButton behavior."
+        },
+        {
+          "path": "frontend/src/components/LikeButton.tsx",
+          "operation": "modify",
+          "description": "Ensure LikeButton behavior remains unchanged (one-like-per-user via useLikedNotes and likeCount display). If any changes are needed for compatibility with likers invalidation, keep them non-breaking and limited to preserving existing behavior (no UI/logic regression)."
+        }
+      ]
+    }
+  ]
+}

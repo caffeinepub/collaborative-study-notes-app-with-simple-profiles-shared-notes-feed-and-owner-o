@@ -1,0 +1,64 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-react-query-data-hooks-and-cache-keys-to-fetch-the-likers-list-for-a-specific-note",
+      "featureTitle": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+      "files": [
+        "frontend/src/hooks/useNoteLikers.ts",
+        "frontend/src/lib/cacheKeys.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-43"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-ui-to-display-who-liked-a-note-visible-to-everyone-from-the-note-reader-view",
+      "featureTitle": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
+      "files": [
+        "frontend/src/components/NoteLikersDialog.tsx",
+        "frontend/src/components/NoteReaderSheet.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-44"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-the-likes-list-ui-stays-consistent-with-the-existing-one-like-per-user-behavior-and-likecount-display-without-changing-the-current-like-button-behavior",
+      "featureTitle": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
+      "files": [
+        "frontend/src/hooks/useNotesMutations.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-45"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
