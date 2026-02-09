@@ -12,10 +12,6 @@ export interface NoteLiker {
     name: string;
     college: string;
 }
-export interface UserProfile {
-    name: string;
-    college: string;
-}
 export interface Note {
     id: bigint;
     likeCount: bigint;
@@ -28,6 +24,21 @@ export interface Note {
     questionNo: string;
     isPinned: boolean;
     college: string;
+}
+export interface ExtendedUserProfile {
+    principal: Principal;
+    name: string;
+    photo?: ProfilePhoto;
+    college: string;
+}
+export interface UserProfile {
+    name: string;
+    photo?: ProfilePhoto;
+    college: string;
+}
+export interface ProfilePhoto {
+    data: Uint8Array;
+    mimeType: string;
 }
 export enum UserRole {
     admin = "admin",
@@ -48,7 +59,9 @@ export interface backendInterface {
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
     likeNote(noteId: bigint): Promise<void>;
+    listAllUsers(): Promise<Array<ExtendedUserProfile>>;
     listNotesSortedByQuestionNo(): Promise<Array<Note>>;
+    reportAndDeleteNote(noteId: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     toggleStarPin(noteId: bigint, isStarred: boolean, isPinned: boolean): Promise<void>;
     updateNote(noteId: bigint, author: string, year: string, college: string, questionNo: string, questionText: string, answer: string, isStarred: boolean, isPinned: boolean): Promise<void>;

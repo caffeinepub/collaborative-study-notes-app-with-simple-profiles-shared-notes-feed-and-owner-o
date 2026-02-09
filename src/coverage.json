@@ -1,84 +1,42 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T18:49:35.565Z",
+  "generatedAt": "2026-02-09T15:00:23.073Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-41",
-        "summary": "Add a public backend API to return the list of users who liked a given note, so anyone can see who liked it.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-42",
-        "summary": "Update the backend types to include a dedicated public type for displaying likers (e.g., principal + name + college), and ensure the like list is derived from the existing noteLikes state and profiles map.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-43",
-        "summary": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+        "id": "REQ-60",
+        "summary": "Set the user-uploaded image file \"WhatsApp Image 2026-02-09 at 8.24.07 PM.jpeg\" as a background behind the main notes feed content (the authenticated NotesFeed screen), so the notes/cards render on top of the image with readable contrast in both light and dark themes.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/cacheKeys.ts",
-          "frontend/src/hooks/useNoteLikers.ts"
+          "frontend/public/assets/WhatsApp Image 2026-02-09 at 8.24.07 PM.jpeg",
+          "frontend/src/components/FeedBackground.tsx",
+          "frontend/src/index.css",
+          "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/lib/cacheKeys.ts",
-          "frontend/src/hooks/useNoteLikers.ts"
-        ]
-      },
-      {
-        "id": "REQ-44",
-        "summary": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/NoteLikersDialog.tsx",
-          "frontend/src/components/NoteReaderSheet.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/NoteLikersDialog.tsx",
-          "frontend/src/components/NoteReaderSheet.tsx"
-        ]
-      },
-      {
-        "id": "REQ-45",
-        "summary": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useNotesMutations.ts",
-          "frontend/src/components/LikeButton.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useNotesMutations.ts"
+          "frontend/src/components/FeedBackground.tsx",
+          "frontend/src/index.css",
+          "frontend/src/App.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/NoteLikersDialog.tsx",
-    "frontend/src/components/NoteReaderSheet.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useNoteLikers.ts",
-    "frontend/src/hooks/useNotesMutations.ts",
-    "frontend/src/lib/cacheKeys.ts",
+    "frontend/src/App.tsx",
+    "frontend/src/components/FeedBackground.tsx",
+    "frontend/src/index.css",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

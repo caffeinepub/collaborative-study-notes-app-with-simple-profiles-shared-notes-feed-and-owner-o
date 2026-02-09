@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Star, Pin } from 'lucide-react';
 import LikeButton from './LikeButton';
+import UserAvatar from './UserAvatar';
+import { usePublicUserProfile } from '../hooks/usePublicUserProfile';
 import type { Note } from '../backend';
 
 interface NoteCardProps {
@@ -10,6 +12,8 @@ interface NoteCardProps {
 }
 
 export default function NoteCard({ note, onClick }: NoteCardProps) {
+  const { data: authorProfile } = usePublicUserProfile(note.owner);
+
   const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
@@ -49,6 +53,11 @@ export default function NoteCard({ note, onClick }: NoteCardProps) {
         </p>
         <div className="flex items-center justify-between gap-2 pt-2 border-t">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <UserAvatar 
+              photo={authorProfile?.photo}
+              name={note.author}
+              size="sm"
+            />
             <span className="font-medium">{note.author}</span>
             <span>•</span>
             <span>{note.college}</span>

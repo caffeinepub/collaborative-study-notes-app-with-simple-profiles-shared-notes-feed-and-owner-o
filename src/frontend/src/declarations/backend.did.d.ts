@@ -10,6 +10,12 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface ExtendedUserProfile {
+  'principal' : Principal,
+  'name' : string,
+  'photo' : [] | [ProfilePhoto],
+  'college' : string,
+}
 export interface Note {
   'id' : bigint,
   'likeCount' : bigint,
@@ -28,7 +34,12 @@ export interface NoteLiker {
   'name' : string,
   'college' : string,
 }
-export interface UserProfile { 'name' : string, 'college' : string }
+export interface ProfilePhoto { 'data' : Uint8Array, 'mimeType' : string }
+export interface UserProfile {
+  'name' : string,
+  'photo' : [] | [ProfilePhoto],
+  'college' : string,
+}
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
@@ -50,7 +61,9 @@ export interface _SERVICE {
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'likeNote' : ActorMethod<[bigint], undefined>,
+  'listAllUsers' : ActorMethod<[], Array<ExtendedUserProfile>>,
   'listNotesSortedByQuestionNo' : ActorMethod<[], Array<Note>>,
+  'reportAndDeleteNote' : ActorMethod<[bigint], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'toggleStarPin' : ActorMethod<[bigint, boolean, boolean], undefined>,
   'updateNote' : ActorMethod<

@@ -114,3 +114,20 @@ export function useLikeNote() {
     },
   });
 }
+
+export function useReportAndDeleteNote() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (noteId: bigint) => {
+      if (!actor) throw new Error('Actor not available');
+      await actor.reportAndDeleteNote(noteId);
+    },
+    onSuccess: (_, noteId) => {
+      queryClient.invalidateQueries({ queryKey: CACHE_KEYS.notes });
+      queryClient.invalidateQueries({ queryKey: CACHE_KEYS.note(noteId) });
+      queryClient.invalidateQueries({ queryKey: CACHE_KEYS.noteLikers(noteId) });
+    },
+  });
+}

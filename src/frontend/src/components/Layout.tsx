@@ -2,10 +2,11 @@ import { ReactNode, useState } from 'react';
 import LoginButton from './LoginButton';
 import ProfileSetupDialog from './ProfileSetupDialog';
 import SidebarDrawer from './SidebarDrawer';
+import UserAvatar from './UserAvatar';
 import { useGetCallerUserProfile } from '../hooks/useCurrentUserProfile';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { Button } from '@/components/ui/button';
-import { BookOpen, User } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { SiCoffeescript } from 'react-icons/si';
 
 interface LayoutProps {
@@ -36,7 +37,11 @@ export default function Layout({ children }: LayoutProps) {
                 onClick={() => setShowProfileEdit(true)}
                 className="gap-2"
               >
-                <User className="h-4 w-4" />
+                <UserAvatar 
+                  photo={userProfile.photo}
+                  name={userProfile.name}
+                  size="sm"
+                />
                 <span className="hidden sm:inline">{userProfile.name}</span>
               </Button>
             )}

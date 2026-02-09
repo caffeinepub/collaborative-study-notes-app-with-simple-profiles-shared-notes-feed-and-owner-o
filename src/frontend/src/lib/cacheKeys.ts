@@ -4,4 +4,5 @@ export const CACHE_KEYS = {
   noteLikers: (id: bigint) => ['noteLikers', id.toString()] as const,
   currentUserProfile: ['currentUserProfile'] as const,
   userProfile: (principal: string) => ['userProfile', principal] as const,
+  userDirectory: ['userDirectory'] as const,
 } as const;

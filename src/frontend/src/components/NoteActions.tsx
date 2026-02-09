@@ -17,9 +17,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useDeleteNote, useToggleStarPin } from '../hooks/useNotesMutations';
+import { useDeleteNote, useToggleStarPin, useReportAndDeleteNote } from '../hooks/useNotesMutations';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { Star, Pin, MoreVertical, Edit, Trash2, Loader2 } from 'lucide-react';
+import { Star, Pin, MoreVertical, Edit, Trash2, Loader2, Flag } from 'lucide-react';
 import { toast } from 'sonner';
 import { normalizeError } from '../lib/errors';
 import type { Note } from '../backend';
@@ -33,11 +33,14 @@ interface NoteActionsProps {
 export default function NoteActions({ note, onEdit, variant = 'dropdown' }: NoteActionsProps) {
   const { identity } = useInternetIdentity();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showReportDialog, setShowReportDialog] = useState(false);
   
   const toggleStarPin = useToggleStarPin();
   const deleteNote = useDeleteNote();
+  const reportNote = useReportAndDeleteNote();
 
   const isOwner = identity && note.owner.toString() === identity.getPrincipal().toString();
+  const isAuthenticated = !!identity;
 
   const handleToggleStar = async () => {
     try {
@@ -70,6 +73,16 @@ export default function NoteActions({ note, onEdit, variant = 'dropdown' }: Note
       await deleteNote.mutateAsync(note.id);
       toast.success('Note deleted successfully');
       setShowDeleteDialog(false);
+    } catch (error) {
+      toast.error(normalizeError(error));
+    }
+  };
+
+  const handleReport = async () => {
+    try {
+      await reportNote.mutateAsync(note.id);
+      toast.success('Reported. This note has been removed.');
+      setShowReportDialog(false);
     } catch (error) {
       toast.error(normalizeError(error));
     }
@@ -111,6 +124,16 @@ export default function NoteActions({ note, onEdit, variant = 'dropdown' }: Note
             </Button>
           </>
         )}
+        {isAuthenticated && !isOwner && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowReportDialog(true)}
+            className="gap-1 text-destructive hover:text-destructive"
+          >
+            <Flag className="h-4 w-4" />
+          </Button>
+        )}
 
         <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <AlertDialogContent>
@@ -125,6 +148,24 @@ export default function NoteActions({ note, onEdit, variant = 'dropdown' }: Note
               <AlertDialogAction onClick={handleDelete} disabled={deleteNote.isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                 {deleteNote.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        <AlertDialog open={showReportDialog} onOpenChange={setShowReportDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Report Inappropriate Note</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to report this note? This note will be deleted immediately after reporting. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleReport} disabled={reportNote.isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                {reportNote.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Report
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -165,6 +206,15 @@ export default function NoteActions({ note, onEdit, variant = 'dropdown' }: Note
               </DropdownMenuItem>
             </>
           )}
+          {isAuthenticated && !isOwner && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setShowReportDialog(true)} className="text-destructive focus:text-destructive">
+                <Flag className="mr-2 h-4 w-4" />
+                Report
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -181,6 +231,24 @@ export default function NoteActions({ note, onEdit, variant = 'dropdown' }: Note
             <AlertDialogAction onClick={handleDelete} disabled={deleteNote.isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
               {deleteNote.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={showReportDialog} onOpenChange={setShowReportDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Report Inappropriate Note</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to report this note? This note will be deleted immediately after reporting. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleReport} disabled={reportNote.isPending} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {reportNote.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Report
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

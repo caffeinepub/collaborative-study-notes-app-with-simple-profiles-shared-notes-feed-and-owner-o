@@ -1,13 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Let anyone view the full list of users who liked a specific note.
+**Goal:** Use the user-uploaded image as a static background behind the authenticated main NotesFeed screen while keeping the feed content readable in light and dark themes.
 
 **Planned changes:**
-- Add a public backend query that takes a noteId and returns the list of likers for that note, with clear handling for “note not found” and empty-like cases.
-- Introduce a dedicated public backend type for displaying likers (principal + name + college), derived from existing noteLikes and profiles data with safe fallbacks for missing profiles.
-- Add React Query cache keys and a hook to fetch a note’s likers list by noteId, handling missing noteId/actor-not-ready states consistently.
-- Update the note reader UI to include a “Liked by” view that lists all likers (name + college) with loading, empty, and error/retry states, visible to everyone (including unauthenticated users who can view notes).
-- Keep existing like button behavior unchanged (one-like-per-user and likeCount display) while ensuring the likers list updates after a successful like (via refetch/invalidation or predictable update).
+- Add the uploaded image (`WhatsApp Image 2026-02-09 at 8.24.07 PM.jpeg`) to the frontend as a static asset and apply it as the background of the NotesFeed container.
+- Ensure all feed UI elements (search bar, Create Note button, note cards/grid, and feed footer text) render above the background without breaking scrolling or click interactions.
+- Apply a theme-aware overlay/tint and/or subtle blur so text and cards remain legible in both light and dark mode.
+- Keep all other screens and non-feed UI areas (e.g., header, sidebar drawer, watermark, toasts, login/profile setup) visually unchanged unless they already share the same feed container area.
 
-**User-visible outcome:** From a note’s reader view, anyone can open a “Liked by” list to see who liked the note (including each liker’s name and college), with appropriate loading/empty/error handling and no changes to the existing like button behavior.
+**User-visible outcome:** After login, the main notes feed displays on top of the provided background image with readable contrast in both light and dark modes, and the feed remains fully usable (scrolling and interactions work as before).

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 19,
-  "summary": "Collaborative study notes mobile-optimized web app (Android browser friendly) where users sign up/login with simple profiles, create notes that can include text plus uploaded images, and all submitted content is publicly visible immediately (no admin role, no approval/moderation workflow). Users can view notes and add comments. Regular users have restricted permissions so only note owners can edit/delete their notes.",
+  "projectStateVersion": 27,
+  "summary": "Collaborative study notes mobile-optimized web app (Android browser friendly) where users sign up/login with simple profiles (including optional uploadable profile photo), create notes that can include text plus uploaded images, and all submitted content is publicly visible immediately (no admin role, no approval/moderation workflow). Users can view notes and add comments. Regular users have restricted permissions so only note owners can edit/delete their notes. Users can report inappropriate notes; a single report triggers immediate auto-deletion.",
   "architectural_notes": [
     "Optimize for Android web browsers (performance and smooth UX).",
     "Implement real-time updates for shared notes visible to all users.",
@@ -10,7 +10,9 @@
     "No APK deliverable: build as a mobile-optimized web app (Android browser first).",
     "Remove admin role and moderation/approval workflow: notes and images are visible immediately upon creation (no pending/approved states).",
     "Implement night mode with a user-controlled dark theme toggle accessible from the sidebar.",
-    "Likes feature should expose a public per-note list of users who liked the note (not just a count)."
+    "Likes feature should expose a public per-note list of users who liked the note (not just a count).",
+    "Implement user-driven reporting: expose a Report action on notes and a backend endpoint that, upon first report, deletes the note immediately (no admin review flow).",
+    "Add a user directory/list screen (or option) to display registered users with name, college, and profile photo."
   ],
   "known_issues": [
     "Intermittent glitch: page/feed does not refresh/update while the app is open (Android browser)."
@@ -232,6 +234,86 @@
         "REQ-45"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-react-profile-setup-edit-dialog-ui-to-let-users-select-an-image-file-from-their-device-preview-the-current-new-profile-photo-upload-save-it-and-remove-it-keep-validation-and-error-feedback-consistent-with-existing-patterns",
+      "title": "Update the React profile setup/edit dialog UI to let users select an image file from their device, preview the current/new profile photo, upload/save it, and remove it; keep validation and error feedback consistent with existing patterns.",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-hooks-mutations-and-cache-keys-needed-to-1-fetch-public-user-profiles-by-principal-for-display-purposes-and-2-upload-remove-the-current-user-s-profile-photo-with-correct-cache-invalidation-so-updated-photos-appear-everywhere-they-are-used",
+      "title": "Add React Query hooks, mutations, and cache keys needed to: (1) fetch public user profiles by principal for display purposes, and (2) upload/remove the current user’s profile photo, with correct cache invalidation so updated photos appear everywhere they are used.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-users-profile-photos-with-a-sensible-fallback-avatar-when-absent-in-the-authenticated-ui-header-profile-area-and-next-to-each-note-and-in-the-note-reader-view-metadata-area-using-the-note-owner-principal-to-resolve-the-author-s-public-profile-photo",
+      "title": "Display users’ profile photos (with a sensible fallback avatar when absent) in the authenticated UI header/profile area and next to each note and in the note reader view metadata area, using the note owner principal to resolve the author’s public profile photo.",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-comments-ui-on-the-note-reader-screen-to-show-each-commenter-s-profile-photo-next-to-their-comment-fallback-if-absent-and-ensure-this-works-for-all-viewers-not-just-the-commenter",
+      "title": "Update the comments UI on the note reader screen to show each commenter’s profile photo next to their comment (fallback if absent), and ensure this works for all viewers (not just the commenter).",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-react-query-mutation-hook-for-reporting-a-note-and-ensure-all-relevant-caches-are-invalidated-so-the-deleted-note-disappears-from-the-feed-and-any-open-note-reader-view-updates-appropriately",
+      "title": "Add a React Query mutation hook for reporting a note and ensure all relevant caches are invalidated so the deleted note disappears from the feed and any open note reader view updates appropriately.",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-facing-report-action-on-each-note-that-any-authenticated-user-can-use-reporting-must-show-a-confirmation-dialog-and-then-trigger-the-report-mutation-showing-success-error-feedback-in-english",
+      "title": "Add a user-facing “Report” action on each note that any authenticated user can use; reporting must show a confirmation dialog and then trigger the report mutation, showing success/error feedback in English.",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-react-query-client-support-for-the-user-directory-list-including-a-stable-cache-key-and-a-hook-to-fetch-the-backend-user-list-with-consistent-loading-error-handling-patterns",
+      "title": "Add React Query client support for the user directory list, including a stable cache key and a hook to fetch the backend user list with consistent loading/error handling patterns.",
+      "reqIds": [
+        "REQ-57"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-facing-user-directory-option-in-the-sidebar-drawer-that-opens-a-ui-showing-all-registered-users-with-profile-photo-or-fallback-avatar-name-and-college",
+      "title": "Add a user-facing \"User Directory\" option in the sidebar drawer that opens a UI showing all registered users with profile photo (or fallback avatar), name, and college.",
+      "reqIds": [
+        "REQ-58"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-in-directory-filtering-so-users-can-quickly-find-people-by-name-or-college-without-additional-backend-calls",
+      "title": "Add basic in-directory filtering so users can quickly find people by name or college without additional backend calls.",
+      "reqIds": [
+        "REQ-59"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-set-the-user-uploaded-image-file-whatsapp-image-2026-02-09-at-8-24-07-pm-jpeg-as-a-background-behind-the-main-notes-feed-content-the-authenticated-notesfeed-screen-so-the-notes-cards-render-on-top-of-the-image-with-readable-contrast-in-both-light-and-dark-themes",
+      "title": "Set the user-uploaded image file \"WhatsApp Image 2026-02-09 at 8.24.07 PM.jpeg\" as a background behind the main notes feed content (the authenticated NotesFeed screen), so the notes/cards render on top of the image with readable contrast in both light and dark themes.",
+      "reqIds": [
+        "REQ-60"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -391,6 +473,76 @@
       "reqIds": [
         "REQ-42"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-42",
+      "summary": "Add profile photo support: users can upload a profile photo from their device, show it on profile and next to notes/comments, and allow users to change or remove it later",
+      "reqIds": [],
+      "status": "in_progress"
+    },
+    {
+      "id": "AR-43",
+      "summary": "Extend the Motoko backend user profile model to support an optional profile photo, including storing the photo bytes and its MIME type, and keep existing name/college fields unchanged.",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-44",
+      "summary": "Add backend APIs to allow an authenticated user to upload/update their own profile photo from a device-selected file, and to remove/clear their photo later.",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-45",
+      "summary": "Add a backend query API that allows anyone to fetch the public display profile for a given principal, including name, college, and optional profile photo, so the frontend can show profile photos next to notes and comments for all viewers.",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-46",
+      "summary": "Add a Report button on each note so any user can report inappropriate/sexual/dirty content; on first report the note is auto-deleted immediately",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-47",
+      "summary": "Add a backend API that allows any authenticated user to report a note; on the first report, the note must be deleted immediately.",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-48",
+      "summary": "Add a user directory option to view who uses the app: list all registered users with name, college, and profile photo",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-49",
+      "summary": "Add a backend API to list all registered users (profiles) so the frontend can display \"who uses my app\" including each user's principal, name, college, and optional profile photo.",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-50",
+      "summary": "Add in-app notifications option for new note posts and likes (who gets notified to be defined)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Set an uploaded image as the background behind the main feed content",
+      "reqIds": [],
       "status": "pending"
     }
   ],

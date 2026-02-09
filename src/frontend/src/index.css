@@ -78,3 +78,14 @@
         text-wrap: balance;
     }
 }
+
+/* Feed background overlay for readability */
+.feed-background-overlay {
+    background: oklch(var(--background) / 0.85);
+    backdrop-filter: blur(4px);
+}
+
+.dark .feed-background-overlay {
+    background: oklch(var(--background) / 0.90);
+    backdrop-filter: blur(6px);
+}

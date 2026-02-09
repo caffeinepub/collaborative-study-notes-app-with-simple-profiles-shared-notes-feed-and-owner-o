@@ -5,8 +5,10 @@ import { Separator } from '@/components/ui/separator';
 import NoteActions from './NoteActions';
 import LikeButton from './LikeButton';
 import NoteLikersDialog from './NoteLikersDialog';
+import UserAvatar from './UserAvatar';
 import { LoadingState, ErrorState } from './Feedback';
 import { useGetNote } from '../hooks/useNotes';
+import { usePublicUserProfile } from '../hooks/usePublicUserProfile';
 import { normalizeError } from '../lib/errors';
 import type { Note } from '../backend';
 
@@ -18,6 +20,7 @@ interface NoteReaderSheetProps {
 
 export default function NoteReaderSheet({ noteId, onClose, onEdit }: NoteReaderSheetProps) {
   const { data: note, isLoading, error, refetch } = useGetNote(noteId);
+  const { data: authorProfile } = usePublicUserProfile(note?.owner || null);
 
   const open = noteId !== null;
 
@@ -48,6 +51,11 @@ export default function NoteReaderSheet({ noteId, onClose, onEdit }: NoteReaderS
                   <SheetTitle className="text-2xl">Question {note.questionNo}</SheetTitle>
                   <SheetDescription className="mt-2">
                     <div className="flex items-center gap-2 flex-wrap">
+                      <UserAvatar 
+                        photo={authorProfile?.photo}
+                        name={note.author}
+                        size="sm"
+                      />
                       <span className="font-medium text-foreground">{note.author}</span>
                       <span>•</span>
                       <span>{note.college}</span>

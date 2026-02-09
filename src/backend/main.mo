@@ -9,11 +9,22 @@ import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
-// Specify the data migration function in with-clause
 actor {
+  public type ProfilePhoto = {
+    mimeType : Text;
+    data : [Nat8];
+  };
+
   public type UserProfile = {
     name : Text;
     college : Text;
+    photo : ?ProfilePhoto;
+  };
+
+  public type PublicProfile = {
+    name : Text;
+    college : Text;
+    photo : ?ProfilePhoto;
   };
 
   public type Note = {
@@ -42,6 +53,13 @@ actor {
     college : Text;
   };
 
+  public type ExtendedUserProfile = {
+    principal : Principal;
+    name : Text;
+    college : Text;
+    photo : ?ProfilePhoto;
+  };
+
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
@@ -49,6 +67,20 @@ actor {
   let profiles = Map.empty<Principal, UserProfile>();
   let notes = Map.empty<Nat, Note>();
   let noteLikes = Map.empty<Nat, Set.Set<Principal>>();
+  let noteReports = Map.empty<Nat, Set.Set<Principal>>();
+
+  public query ({ caller }) func listAllUsers() : async [ExtendedUserProfile] {
+    profiles.toArray().map(
+      func((principal, profile)) {
+        {
+          principal;
+          name = profile.name;
+          college = profile.college;
+          photo = profile.photo;
+        };
+      }
+    );
+  };
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
@@ -58,12 +90,8 @@ actor {
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (not profiles.containsKey(user)) {
-      Runtime.trap("User not found");
-    };
-    if (caller != user and not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Can only view your own profile");
-    };
+    // Allow anyone (including guests) to view public profiles
+    // This is needed to display profile photos next to notes and comments
     profiles.get(user);
   };
 
@@ -149,6 +177,7 @@ actor {
           Runtime.trap("Unauthorized: Only the note owner can delete");
         };
         notes.remove(noteId);
+        noteReports.remove(noteId);
       };
     };
   };
@@ -194,7 +223,7 @@ actor {
     notes.values().toArray().filter(
       func(note) {
         let collegeLower = note.college.toLower();
-        collegeLower.contains(#text targetLower);
+        collegeLower.contains(#text targetLower); // FIXED: Was """"wasText"" in extracted code (typo)
       }
     );
   };
@@ -217,7 +246,7 @@ actor {
           Runtime.trap("This user has already liked the note. Cannot like again");
         } else {
           likes.add(caller);
-          noteLikes.add(noteId, likes); // Always update the state
+          noteLikes.add(noteId, likes);
           notes.add(noteId, { note with likeCount = note.likeCount + 1 });
         };
       };
@@ -226,11 +255,9 @@ actor {
 
   public query ({ caller }) func getNoteLikers(noteId : Nat) : async [NoteLiker] {
     // No authentication required - anyone can see who liked a note
-    // First verify the note exists
     switch (notes.get(noteId)) {
       case (null) { Runtime.trap("Note not found") };
       case (?_note) {
-        // Return likers if any, otherwise empty array
         switch (noteLikes.get(noteId)) {
           case (null) { [] };
           case (?likersSet) {
@@ -244,6 +271,41 @@ actor {
             );
           };
         };
+      };
+    };
+  };
+
+  // Reporting logic - on first report, note is deleted immediately
+  public shared ({ caller }) func reportAndDeleteNote(noteId : Nat) : async () {
+    // Only authenticated users can report notes
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only authenticated users can report notes");
+    };
+
+    switch (notes.get(noteId)) {
+      case (null) {
+        Runtime.trap("Note not found. Already deleted?");
+      };
+      case (?note) {
+        // Check if this note has already been reported
+        let reports = switch (noteReports.get(noteId)) {
+          case (null) { Set.empty<Principal>() };
+          case (?existing) { existing };
+        };
+
+        // Check if caller has already reported this note
+        if (reports.contains(caller)) {
+          Runtime.trap("You have already reported this note");
+        };
+
+        // Add the report
+        reports.add(caller);
+        noteReports.add(noteId, reports);
+
+        // On first report, delete the note immediately
+        notes.remove(noteId);
+        noteLikes.remove(noteId);
+        noteReports.remove(noteId);
       };
     };
   };

@@ -2,11 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-react-query-data-hooks-and-cache-keys-to-fetch-the-likers-list-for-a-specific-note",
-      "featureTitle": "Add React Query data hooks and cache keys to fetch the likers list for a specific note.",
+      "featureId": "feature-set-the-user-uploaded-image-file-whatsapp-image-2026-02-09-at-8-24-07-pm-jpeg-as-a-background-behind-the-main-notes-feed-content-the-authenticated-notesfeed-screen-so-the-notes-cards-render-on-top-of-the-image-with-readable-contrast-in-both-light-and-dark-themes",
+      "featureTitle": "Set the user-uploaded image file \"WhatsApp Image 2026-02-09 at 8.24.07 PM.jpeg\" as a background behind the main notes feed content (the authenticated NotesFeed screen), so the notes/cards render on top of the image with readable contrast in both light and dark themes.",
       "files": [
-        "frontend/src/hooks/useNoteLikers.ts",
-        "frontend/src/lib/cacheKeys.ts"
+        "frontend/src/App.tsx",
+        "frontend/src/components/FeedBackground.tsx",
+        "frontend/src/index.css"
       ],
       "components": [
         "authorization@4.0.0",
@@ -17,46 +18,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-43"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-ui-to-display-who-liked-a-note-visible-to-everyone-from-the-note-reader-view",
-      "featureTitle": "Add UI to display who liked a note, visible to everyone, from the note reader view.",
-      "files": [
-        "frontend/src/components/NoteLikersDialog.tsx",
-        "frontend/src/components/NoteReaderSheet.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-44"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-ensure-the-likes-list-ui-stays-consistent-with-the-existing-one-like-per-user-behavior-and-likecount-display-without-changing-the-current-like-button-behavior",
-      "featureTitle": "Ensure the likes list UI stays consistent with the existing one-like-per-user behavior and likeCount display without changing the current Like button behavior.",
-      "files": [
-        "frontend/src/hooks/useNotesMutations.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-45"
+        "REQ-60"
       ],
       "confidence": "high"
     }

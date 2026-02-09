@@ -13,8 +13,13 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const ProfilePhoto = IDL.Record({
+  'data' : IDL.Vec(IDL.Nat8),
+  'mimeType' : IDL.Text,
+});
 export const UserProfile = IDL.Record({
   'name' : IDL.Text,
+  'photo' : IDL.Opt(ProfilePhoto),
   'college' : IDL.Text,
 });
 export const Note = IDL.Record({
@@ -33,6 +38,12 @@ export const Note = IDL.Record({
 export const NoteLiker = IDL.Record({
   'principal' : IDL.Principal,
   'name' : IDL.Text,
+  'college' : IDL.Text,
+});
+export const ExtendedUserProfile = IDL.Record({
+  'principal' : IDL.Principal,
+  'name' : IDL.Text,
+  'photo' : IDL.Opt(ProfilePhoto),
   'college' : IDL.Text,
 });
 
@@ -68,7 +79,9 @@ export const idlService = IDL.Service({
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'likeNote' : IDL.Func([IDL.Nat], [], []),
+  'listAllUsers' : IDL.Func([], [IDL.Vec(ExtendedUserProfile)], ['query']),
   'listNotesSortedByQuestionNo' : IDL.Func([], [IDL.Vec(Note)], ['query']),
+  'reportAndDeleteNote' : IDL.Func([IDL.Nat], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'toggleStarPin' : IDL.Func([IDL.Nat, IDL.Bool, IDL.Bool], [], []),
   'updateNote' : IDL.Func(
@@ -96,7 +109,15 @@ export const idlFactory = ({ IDL }) => {
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
-  const UserProfile = IDL.Record({ 'name' : IDL.Text, 'college' : IDL.Text });
+  const ProfilePhoto = IDL.Record({
+    'data' : IDL.Vec(IDL.Nat8),
+    'mimeType' : IDL.Text,
+  });
+  const UserProfile = IDL.Record({
+    'name' : IDL.Text,
+    'photo' : IDL.Opt(ProfilePhoto),
+    'college' : IDL.Text,
+  });
   const Note = IDL.Record({
     'id' : IDL.Nat,
     'likeCount' : IDL.Nat,
@@ -113,6 +134,12 @@ export const idlFactory = ({ IDL }) => {
   const NoteLiker = IDL.Record({
     'principal' : IDL.Principal,
     'name' : IDL.Text,
+    'college' : IDL.Text,
+  });
+  const ExtendedUserProfile = IDL.Record({
+    'principal' : IDL.Principal,
+    'name' : IDL.Text,
+    'photo' : IDL.Opt(ProfilePhoto),
     'college' : IDL.Text,
   });
   
@@ -148,7 +175,9 @@ export const idlFactory = ({ IDL }) => {
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'likeNote' : IDL.Func([IDL.Nat], [], []),
+    'listAllUsers' : IDL.Func([], [IDL.Vec(ExtendedUserProfile)], ['query']),
     'listNotesSortedByQuestionNo' : IDL.Func([], [IDL.Vec(Note)], ['query']),
+    'reportAndDeleteNote' : IDL.Func([IDL.Nat], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'toggleStarPin' : IDL.Func([IDL.Nat, IDL.Bool, IDL.Bool], [], []),
     'updateNote' : IDL.Func(

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
+import { useInternetIdentity } from './useInternetIdentity';
 import { CACHE_KEYS } from '../lib/cacheKeys';
 import type { UserProfile } from '../backend';
 
@@ -25,6 +26,7 @@ export function useGetCallerUserProfile() {
 
 export function useSaveCallerUserProfile() {
   const { actor } = useActor();
+  const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -34,6 +36,12 @@ export function useSaveCallerUserProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CACHE_KEYS.currentUserProfile });
+      
+      // Also invalidate public profile for current user
+      if (identity) {
+        const principalString = identity.getPrincipal().toString();
+        queryClient.invalidateQueries({ queryKey: CACHE_KEYS.userProfile(principalString) });
+      }
     },
   });
 }

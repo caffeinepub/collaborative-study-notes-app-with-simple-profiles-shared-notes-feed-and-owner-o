@@ -4,6 +4,7 @@ import { useGetCallerUserProfile } from './hooks/useCurrentUserProfile';
 import Layout from './components/Layout';
 import ProfileSetupDialog from './components/ProfileSetupDialog';
 import NotesFeed from './components/NotesFeed';
+import FeedBackground from './components/FeedBackground';
 import Toasts from './components/Toasts';
 import CornerWatermark from './components/CornerWatermark';
 import { Button } from '@/components/ui/button';
@@ -173,30 +174,32 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <Layout>
-        {showProfileSetup ? (
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <Card className="max-w-md w-full">
-              <CardHeader>
-                <CardTitle>Welcome!</CardTitle>
-                <CardDescription>Set up your profile to continue</CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        ) : (
-          <NotesFeed />
-        )}
-      </Layout>
+      <FeedBackground>
+        <Layout>
+          {showProfileSetup ? (
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <Card className="max-w-md w-full">
+                <CardHeader>
+                  <CardTitle>Welcome!</CardTitle>
+                  <CardDescription>Set up your profile to continue</CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          ) : (
+            <NotesFeed />
+          )}
+        </Layout>
 
-      <ProfileSetupDialog
-        open={showProfileSetup}
-        onOpenChange={() => {}}
-        initialProfile={null}
-        isEditing={false}
-      />
+        <ProfileSetupDialog
+          open={showProfileSetup}
+          onOpenChange={() => {}}
+          initialProfile={null}
+          isEditing={false}
+        />
 
-      <Toasts />
-      <CornerWatermark />
+        <Toasts />
+        <CornerWatermark />
+      </FeedBackground>
     </ErrorBoundary>
   );
 }
